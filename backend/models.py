@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.text import slugify
-import re
 from django.core.validators import RegexValidator
 
 COLOR_VALIDATOR = RegexValidator(r'^#(?:[0-9a-fA-F]{3}){1,2}$', 'only valid hex color code is accepted')

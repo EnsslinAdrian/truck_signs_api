@@ -10,13 +10,27 @@ done
 echo "PostgreSQL is active"
 
 python manage.py collectstatic --noinput
+python manage.py makemigrations || true
 python manage.py migrate
-python manage.py makemigrations
 
-gunicorn truck_signs_designs.wsgi:application --bind 0.0.0.0:8000
+python manage.py shell << EOF
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
+user, created = User.objects.get_or_create(
+    username="${SUPERUSER_USERNAME}",
+    defaults={
+        "email": "${SUPERUSER_EMAIL}",
+        "is_staff": True,
+        "is_superuser": True,
+    }
+)
 
-echo "Postgresql migrations finished"
+user.is_staff = True
+user.is_superuser = True
+user.set_password("${SUPERUSER_PASSWORD}")
+user.save()
+EOF
 
-python manage.py runserver
+exec gunicorn truck_signs_designs.wsgi:application --bind 0.0.0.0:8000

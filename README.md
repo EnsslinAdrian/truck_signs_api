@@ -12,9 +12,12 @@
 ## Table of Contents
 * [Description](#description)
 * [Installation](#installation)
+* [Docker & Deployment](#docker--deployment)
+* [Quickstart (Docker)](#quickstart-docker)
+* [How to Build the Image](#how-to-build-the-image)
+* [Usage](#usage)
 * [Screenshots of the Django Backend Admin Panel](#screenshots)
 * [Useful Links](#useful_links)
-
 
 
 ## Description
@@ -103,6 +106,109 @@ __NOTE:__ To create Truck vinyls with Truck logos in them, first create the __Ca
 ---
 
 <a name="screenshots"></a>
+
+
+## Docker & Deployment
+
+Docker Compose is intentionally **not used**.\
+All containers are started using individual `docker run` commands.
+
+The application consists of two containers: - **Backend**: Django REST
+API served via Gunicorn (WSGI) - **Database**: PostgreSQL running in a
+separate container
+
+Both containers communicate via a shared Docker network.
+
+
+### Quickstart (Docker)
+
+#### Prerequisites
+
+-   Docker installed
+-   Docker daemon running
+
+#### 1. Create Docker network
+
+``` bash
+docker network create truck_signs
+```
+
+#### 2. Start PostgreSQL container
+
+``` bash
+docker run -d \
+  --name db \
+  --network truck_signs \
+  -e POSTGRES_DB=<DB_NAME> \
+  -e POSTGRES_USER=<DB_USER> \
+  -e POSTGRES_PASSWORD=<DB_PASSWORD> \
+  -v db_data:/var/lib/postgresql/data \
+  --restart unless-stopped \
+  postgres:15-alpine
+```
+
+#### 3. Build backend image
+
+``` bash
+docker build -t truck-signs-backend .
+```
+
+#### 4. Run backend container
+
+``` bash
+docker run -d \
+  --name backend \
+  --network truck_signs \
+  --env-file <PATH_TO_ENV_FILE> \
+  -p 8020:8000 \
+  -v backend_media:/app/media \
+  --restart unless-stopped \
+  truck-signs-backend
+```
+
+The API is available at:
+
+    http://localhost:8020
+
+The Django Admin interface is available at:
+
+    http://localhost:8020/admin/
+
+
+### How to Build the Image
+
+The backend Docker image is built using the provided `Dockerfile`:
+
+``` bash
+docker build -t truck-signs-backend .
+```
+
+The image includes: - Python 3.8 runtime - Required system
+dependencies - Python dependencies from `requirements.txt` - Gunicorn
+WSGI server
+
+### Usage
+
+#### Environment Configuration
+
+The application is configured via environment variables provided through
+an external `.env` file.
+
+Required variables: - `SECRET_KEY` - `DB_NAME` - `DB_USER` -
+`DB_PASSWORD` - `DB_HOST` - `DB_PORT` - `SUPERUSER_USERNAME` -
+`SUPERUSER_EMAIL` - `SUPERUSER_PASSWORD`
+
+Optional variables: - Stripe configuration - Email configuration -
+Cloudinary configuration
+
+#### Application Startup
+
+On container startup, the following steps are executed automatically: -
+Database availability check - `collectstatic` - `makemigrations` -
+`migrate` - Non-interactive `createsuperuser` - Startup of the Gunicorn
+WSGI application
+
+The Django development server is **not used**.
 
 ## Screenshots of the Django Backend Admin Panel
 

@@ -30,20 +30,22 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',]
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'corsheaders',
     'rest_framework',
     'cloudinary',
     'backend',
-    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -134,8 +136,9 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = (os.path.join(ROOT_BASE_DIR, 'static'),)
-STATIC_ROOT = os.path.join(ROOT_BASE_DIR,'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # STATICFILES_FINDERS = (
 # 'django.contrib.staticfiles.finders.FileSystemFinder',
