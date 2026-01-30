@@ -156,3 +156,5 @@ Thumbs.db
 
 # profiling data
 .prof
+
+simple_env_config.env
