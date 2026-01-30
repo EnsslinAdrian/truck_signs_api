@@ -127,13 +127,19 @@ Both containers communicate via a shared Docker network.
 -   Docker installed
 -   Docker daemon running
 
-#### 1. Create Docker network
+#### 1. Create simple_env_config.env
+```bash
+cd truck_signs_designs/settings
+cp .env.template simple_env_config.env
+```
+
+#### 2. Create Docker network
 
 ``` bash
 docker network create truck_signs
 ```
 
-#### 2. Start PostgreSQL container
+#### 3. Start PostgreSQL container
 
 ``` bash
 docker run -d \
@@ -147,13 +153,13 @@ docker run -d \
   postgres:15-alpine
 ```
 
-#### 3. Build backend image
+#### 4. Build backend image
 
 ``` bash
 docker build -t truck-signs-backend .
 ```
 
-#### 4. Run backend container
+#### 5. Run backend container
 
 ``` bash
 docker run -d \
@@ -168,11 +174,11 @@ docker run -d \
 
 The API is available at:
 
-    http://localhost:8020
+    http://<YOUR_IP>:8020
 
 The Django Admin interface is available at:
 
-    http://localhost:8020/admin/
+    http://<YOUR_IP>:8020/admin/
 
 
 ### How to Build the Image
