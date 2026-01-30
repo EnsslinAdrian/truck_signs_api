@@ -2,18 +2,10 @@ FROM python:3.8
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-       gcc \
-       build-essential \
-       netcat-openbsd \
-    && rm -rf /var/lib/apt/lists/*
+COPY . /app/
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-RUN chmod +x ./entrypoint.sh
+RUN pip install --no-cache-dir -r requirements.txt && \
+    chmod +x /app/entrypoint.sh 
 
 EXPOSE 8000
 
