@@ -13,6 +13,7 @@
 * [Description](#description)
 * [Installation](#installation)
 * [Docker & Deployment](#docker--deployment)
+* [Prerequisites](#prerequisites)
 * [Quickstart (Docker)](#quickstart-docker)
 * [How to Build the Image](#how-to-build-the-image)
 * [Usage](#usage)
@@ -119,13 +120,13 @@ separate container
 
 Both containers communicate via a shared Docker network.
 
-
-### Quickstart (Docker)
-
-#### Prerequisites
+### Prerequisites
 
 -   Docker installed
 -   Docker daemon running
+
+
+### Quickstart (Docker)
 
 #### 1. Create simple_env_config.env
 ```bash
@@ -149,7 +150,7 @@ docker run -d \
   -e POSTGRES_USER=<DB_USER> \
   -e POSTGRES_PASSWORD=<DB_PASSWORD> \
   -v db_data:/var/lib/postgresql/data \
-  --restart unless-stopped \
+  --restart on-failure:5 \
   postgres:15-alpine
 ```
 
@@ -168,7 +169,7 @@ docker run -d \
   --env-file <PATH_TO_ENV_FILE> \
   -p 8020:8000 \
   -v backend_media:/app/media \
-  --restart unless-stopped \
+  --restart on-failure:5 \
   truck-signs-backend
 ```
 
