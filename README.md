@@ -26,20 +26,40 @@ Before running this project, ensure you have:
 - **Docker Compose** installed 
 
 ## Quickstart
+Clone the repository from GitHub
+```bash
+git clone git@github.com:EnsslinAdrian/Conduit-Orchestrator.git conduit-orchestrator
+```
 
-#### 1. Create .env
+Navigate to the folder
+```bash
+cd conduit-orchestrator
+```
+
+Create .env
 ```bash
 cd truck_signs_designs/settings
 cp .env.template .env
 ```
+> [!CAUTION]
+> The `.env` file contains dummy variables.
 
-#### 2. Create Docker network
+Generate a Django secret key:
+```bash
+python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+> [!NOTE]
+> Paste the generated key into your `.env`.
+
+
+Create Docker network
 
 ``` bash
 docker network create truck_signs
 ```
 
-#### 3. Start PostgreSQL container
+Start PostgreSQL container
 
 ``` bash
 docker run -d \
@@ -53,13 +73,13 @@ docker run -d \
   postgres:15-alpine
 ```
 
-#### 4. Build backend image
+Build backend image
 
 ``` bash
 docker build -t truck-signs-backend .
 ```
 
-#### 5. Run backend container
+Run backend container
 
 ``` bash
 docker run -d \
