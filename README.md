@@ -28,7 +28,7 @@ Before running this project, ensure you have:
 ## Quickstart
 Clone the repository from GitHub
 ```bash
-git clone git@github.com:EnsslinAdrian/Conduit-Orchestrator.git conduit-orchestrator
+git clone git@github.com:EnsslinAdrian/truck_signs_api.git
 ```
 
 Navigate to the folder
