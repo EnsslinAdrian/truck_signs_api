@@ -1,4 +1,5 @@
 import environ
+import os
 from .base import *
 
 DEBUG = True
@@ -10,9 +11,10 @@ environ.Env.read_env()
 SECRET_KEY = env("DOCKER_SECRET_KEY")
 DEBUG = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+ALLOWED_HOSTS = os.getenv(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1"
+).split(",")
 
 
 
